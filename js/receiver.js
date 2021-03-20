@@ -45,12 +45,12 @@ castDebugLogger.loggerLevelByTags = {
 };
 
 // Update playback config licenseUrl according to provided value in load request.
-context.getPlayerManager().setMediaPlaybackInfoHandler((loadRequest, playbackConfig) => {
-    if (loadRequest.media.customData && loadRequest.media.customData.adTagUrl) {
-      playbackConfig.licenseUrl = loadRequest.media.customData.adTagUrl;
-    }
-    return playbackConfig;
-  });
+// context.getPlayerManager().setMediaPlaybackInfoHandler((loadRequest, playbackConfig) => {
+//     if (loadRequest.media.customData && loadRequest.media.customData.adTagUrl) {
+//       playbackConfig.licenseUrl = loadRequest.media.customData.adTagUrl;
+//     }
+//     return playbackConfig;
+//   });
 
 if (context.start() != null) {
     let loadRequestData = new cast.framework.messages.LoadRequestData();
