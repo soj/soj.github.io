@@ -30,7 +30,7 @@ const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
 castDebugLogger.setEnabled(true);
 
 // Show debug overlay
-// castDebugLogger.showDebugLogs(true);
+castDebugLogger.showDebugLogs(true);
 
 playerManager.addEventListener(
     cast.framework.events.category.CORE,
