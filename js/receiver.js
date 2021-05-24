@@ -7,8 +7,8 @@ playerManager.setMessageInterceptor(
     cast.framework.messages.MessageType.LOAD,
     request => {
         castDebugLogger.info('MyAPP.LOG', 'Intercepting LOAD request');
-
         castDebugLogger.warn('MyAPP.LOG', 'Playable URL: ' + request.media.contentId);
+        castDebugLogger.warn('MyAPP.LOG', 'The Event type: ' + request.type);
 
         if (request.media.customData && request.media.customData.adTagUrl) {
 
