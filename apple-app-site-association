@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "X7R95X8XU9.com.waterbearnetwork.waterbear",
+        "paths": [
+          "/watch/*",
+          "/take-action/*",
+          "/partner/*",
+          "/project/*"
+        ]
+      }
+    ]
+  }
+}
