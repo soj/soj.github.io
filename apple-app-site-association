@@ -5,8 +5,8 @@
       {
         "appID": "H266HBF278.com.axonista.waterbear.qatv",
         "paths": [
-          "NOT /partner/*/donate/*",
-          "NOT /project/*/donate/*",
+          "NOT /partner/*/donate",
+          "NOT /project/*/donate",
           "/watch/*",
           "/take-action/*",
           "/partner/*",
