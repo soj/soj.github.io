@@ -9,18 +9,18 @@
     <cast-media-player></cast-media-player>
     <script src="https://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
     <!-- Cast Debug Logger -->
-    <!--script src="https://www.gstatic.com/eureka/cast_codelabs/debug_layer/caf_receiver_logger.js"></!--script -->
+    <script src="https://www.gstatic.com/eureka/cast_codelabs/debug_layer/caf_receiver_logger.js"></script>
     <script src="js/receiver.js"></script>
   </body>
   <script>
     let loadingContent = `
       <div style='display: flex; align-items: center; float:left;'>
         <img src='assets/ic_cast_48px.svg' alt='cast-image' style="width: 12%">
-        <h3 style='float: right; white-space: nowrap; font-family: VMCircularShout; font-size:130%; margin-left: 4%;'>Connecting your device</h3>
+        <h3 style='float: right; white-space: nowrap; font-family: VMCircularShout; font-size:130%; margin-left: 4%;'>Ready to cast</h3>
       </div>
     `
     const spinner = document.getElementsByTagName('cast-media-player')[0].shadowRoot.children[1].getElementsByClassName('foreground')[0].getElementsByClassName('spinner')[0];
-    spinner.style.bottom = '5%';
+    spinner.style.bottom = '22%';
     spinner.style.left = '42%';
     spinner.innerHTML = loadingContent;
     spinner.style.animation = 'none';
