@@ -6,13 +6,13 @@ const playerManager = context.getPlayerManager();
 playerManager.setMessageInterceptor(
     cast.framework.messages.MessageType.LOAD,
     request => {
-        castDebugLogger.info('MyAPP.LOG', 'Intercepting LOAD request');
-        castDebugLogger.warn('MyAPP.LOG', 'Playable URL: ' + request.media.contentId);
-        castDebugLogger.warn('MyAPP.LOG', 'The Event type: ' + request.type);
+//        castDebugLogger.info('MyAPP.LOG', 'Intercepting LOAD request');
+//        castDebugLogger.warn('MyAPP.LOG', 'Playable URL: ' + request.media.contentId);
+//        castDebugLogger.warn('MyAPP.LOG', 'The Event type: ' + request.type);
 
         if (request.media.customData && request.media.customData.adTagUrl) {
 
-            castDebugLogger.warn('MyAPP.LOG', 'Ad Tag: ' + request.media.customData.adTagUrl);
+//            castDebugLogger.warn('MyAPP.LOG', 'Ad Tag: ' + request.media.customData.adTagUrl);
 
             request.media.vmapAdsRequest = {
                 adTagUrl: request.media.customData.adTagUrl
@@ -23,26 +23,26 @@ playerManager.setMessageInterceptor(
     });
 
 /** Debug Logger **/
-const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
+//const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
 
 // Enable debug logger and show a warning on receiver
 // NOTE: make sure it is disabled on production
-castDebugLogger.setEnabled(false);
+//castDebugLogger.setEnabled(false);
 
 // Show debug overlay
-castDebugLogger.showDebugLogs(false);
+//castDebugLogger.showDebugLogs(false);
 
-playerManager.addEventListener(
-    cast.framework.events.category.CORE,
-    event => {
-        castDebugLogger.info('EVENT.CORE', event);
-    });
+//playerManager.addEventListener(
+//    cast.framework.events.category.CORE,
+//    event => {
+//        castDebugLogger.info('EVENT.CORE', event);
+//    });
 
 // Set verbosity level for custom tags
-castDebugLogger.loggerLevelByTags = {
-    'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
-    'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
-};
+//castDebugLogger.loggerLevelByTags = {
+//    'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
+//    'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
+//};
 
 // Update playback config licenseUrl according to provided value in load request.
 // context.getPlayerManager().setMediaPlaybackInfoHandler((loadRequest, playbackConfig) => {
