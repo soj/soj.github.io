@@ -12,24 +12,6 @@
     <!-- script src="https://www.gstatic.com/eureka/cast_codelabs/debug_layer/caf_receiver_logger.js"></!--script -->
     <script src="js/receiver.js"></script>
   </body>
-  <script>
-    let loadingContent = `
-      <div style='display: flex; align-items: center; float:left;'>
-        <img src='assets/ic_cast_48px.svg' alt='cast-image' style="width: 12%">
-        <h3 style='float: right; white-space: nowrap; font-family: VMCircularShout; font-size:130%; margin-left: 4%;'>Ready to cast</h3>
-      </div>
-    `
-    const spinner = document.getElementsByTagName('cast-media-player')[0].shadowRoot.children[1].getElementsByClassName('foreground')[0].getElementsByClassName('spinner')[0];
-    spinner.style.bottom = '22%';
-    spinner.style.left = '46%';
-    spinner.innerHTML = loadingContent;
-    spinner.style.animation = 'none';
-    // playerManager.addEventListener(
-    // cast.framework.events.category.CORE,
-    // event => {
-    //     console.log(event);
-    // });
-  </script>
   <style>
     cast-media-player {
       --background-image: url('assets/vm-bg-compressed.jpg');
