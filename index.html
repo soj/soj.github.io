@@ -12,12 +12,12 @@
     <!-- script src="https://www.gstatic.com/eureka/cast_codelabs/debug_layer/caf_receiver_logger.js"></!--script -->
     <script src="js/receiver.js"></script>
   </body>
- // <script>
- //   context.addEventListener(cast.framework.system.EventType.READY, () => {
- //     let playerElement = document.getElementsByTagName("cast-media-player")[0];
-      //playerElement.style.setProperty('--splash-image', 'none');
- //   });
- // </script>
+  <script>
+    context.addEventListener(cast.framework.system.EventType.READY, () => {
+      let playerElement = document.getElementsByTagName("cast-media-player")[0];
+      playerElement.style.setProperty('--splash-image', 'none');
+    });
+  </script>
   <style>
     cast-media-player {
       --logo-image: url('assets/vm-logo-white.svg');
