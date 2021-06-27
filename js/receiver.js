@@ -22,6 +22,12 @@ playerManager.setMessageInterceptor(
         return request;
     });
 
+if (context.start() != null) {
+    let loadRequestData = new cast.framework.messages.LoadRequestData();
+    loadRequestData.autoplay = true;
+    playerManager.load(loadRequestData);
+}
+
 /** Debug Logger **/
 //const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
 
@@ -32,28 +38,14 @@ playerManager.setMessageInterceptor(
 // Show debug overlay
 //castDebugLogger.showDebugLogs(false);
 
-//playerManager.addEventListener(
-//    cast.framework.events.category.CORE,
-//    event => {
-//        castDebugLogger.info('EVENT.CORE', event);
-//    });
-
 // Set verbosity level for custom tags
 //castDebugLogger.loggerLevelByTags = {
 //    'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
 //    'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
 //};
 
-// Update playback config licenseUrl according to provided value in load request.
-// context.getPlayerManager().setMediaPlaybackInfoHandler((loadRequest, playbackConfig) => {
-//     if (loadRequest.media.customData && loadRequest.media.customData.adTagUrl) {
-//       playbackConfig.licenseUrl = loadRequest.media.customData.adTagUrl;
-//     }
-//     return playbackConfig;
-//   });
-
-if (context.start() != null) {
-    let loadRequestData = new cast.framework.messages.LoadRequestData();
-    loadRequestData.autoplay = true;
-    playerManager.load(loadRequestData);
-}
+//playerManager.addEventListener(
+//    cast.framework.events.category.CORE,
+//    event => {
+//        castDebugLogger.info('EVENT.CORE', event);
+//    });

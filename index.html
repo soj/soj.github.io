@@ -24,11 +24,18 @@
     spinner.style.left = '46%';
     spinner.innerHTML = loadingContent;
     spinner.style.animation = 'none';
+    
     playerManager.addEventListener(
     cast.framework.events.category.CORE,
     event => {
         console.log(cast.framework.events.DetailedErrorCode);
     });
+
+    context.addEventListener(cast.framework.system.EventType.READY, () => {
+      let playerElement = document.getElementsByTagName("cast-media-player")[0];
+      playerElement.style.setProperty('--splash-image', 'none');
+    });
+
   </script>
   <style>
     cast-media-player {
