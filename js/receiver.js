@@ -1,8 +1,45 @@
 const context = cast.framework.CastReceiverContext.getInstance();
 const playerManager = context.getPlayerManager();
+const mediaElement = document.getElementsByTagName("cast-media-player")[0].getMediaElement();
+const streamManager = new google.ima.cast.dai.api.StreamManager(mediaElement);
 
+const getStreamRequest = (request) => {
+  const imaRequestData = request.media.customData;
+  let streamRequest = null;
+  if (imaRequestData.assetKey) {
+    // Live stream
+    streamRequest = new google.ima.cast.dai.api.LiveStreamRequest();
+    streamRequest.assetKey = imaRequestData.assetKey;
+  } else if (imaRequestData.contentSourceId) {
+    // VOD stream
+    streamRequest = new google.ima.cast.dai.api.VODStreamRequest();
+    streamRequest.contentSourceId = imaRequestData.contentSourceId;
+    streamRequest.videoId = imaRequestData.videoId;
+  }
+  if (streamRequest && imaRequestData.ApiKey) {
+    streamRequest.ApiKey = imaRequestData.ApiKey;
+  }
+  if (streamRequest && imaRequestData.senderCanSkip) {
+    streamRequest.senderCanSkip = imaRequestData.senderCanSkip;
+  }
+  return streamRequest;
+};
+
+playerManager.setMessageInterceptor(
+    cast.framework.messages.MessageType.LOAD, (request) => {
+      return streamManager.requestStream(request, getStreamRequest(request))
+          .then((request) => {
+            this.broadcast('Stream request successful.');
+            return Promise.resolve(request);
+          })
+          .catch((error) => {
+            this.broadcast('Stream request failed.');
+            return Promise.resolve(request);
+          });
+    });
 
 /** LOAD interceptor **/
+/**
 playerManager.setMessageInterceptor(
     cast.framework.messages.MessageType.LOAD,
     request => {
@@ -21,12 +58,14 @@ playerManager.setMessageInterceptor(
 
         return request;
     });
+**/
+castContext.start();
 
-if (context.start() != null) {
-    let loadRequestData = new cast.framework.messages.LoadRequestData();
-    loadRequestData.autoplay = true;
-    playerManager.load(loadRequestData);
-}
+//if (context.start() != null) {
+//    let loadRequestData = new cast.framework.messages.LoadRequestData();
+//    loadRequestData.autoplay = true;
+//    playerManager.load(loadRequestData);
+//}
 
 /** Debug Logger **/
 //const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
