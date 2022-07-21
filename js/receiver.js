@@ -59,13 +59,13 @@ playerManager.setMessageInterceptor(
         return request;
     });
 **/
-castContext.start();
+//castContext.start();
 
-//if (context.start() != null) {
-//    let loadRequestData = new cast.framework.messages.LoadRequestData();
-//    loadRequestData.autoplay = true;
-//    playerManager.load(loadRequestData);
-//}
+if (context.start() != null) {
+    let loadRequestData = new cast.framework.messages.LoadRequestData();
+    loadRequestData.autoplay = true;
+    playerManager.load(loadRequestData);
+}
 
 /** Debug Logger **/
 //const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
