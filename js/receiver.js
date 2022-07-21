@@ -30,11 +30,11 @@ playerManager.setMessageInterceptor(
     cast.framework.messages.MessageType.LOAD, (request) => {
       return streamManager.requestStream(request, getStreamRequest(request))
           .then((request) => {
-            this.broadcast('Stream request successful.');
+ //           this.broadcast('Stream request successful.');
             return Promise.resolve(request);
           })
           .catch((error) => {
-            this.broadcast('Stream request failed.');
+ //           this.broadcast('Stream request failed.');
             return Promise.resolve(request);
           });
     });
