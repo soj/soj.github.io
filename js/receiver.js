@@ -59,7 +59,7 @@ playerManager.setMessageInterceptor(
         return request;
     });
 **/
-//castContext.start();
+castContext.start();
 
 
 /** Debug Logger **/
@@ -84,8 +84,10 @@ playerManager.addEventListener(
         castDebugLogger.info('EVENT.CORE', event);
     });
 
+/**
 if (context.start() != null) {
     let loadRequestData = new cast.framework.messages.LoadRequestData();
     loadRequestData.autoplay = true;
     playerManager.load(loadRequestData);
 }
+**/
