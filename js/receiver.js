@@ -61,30 +61,31 @@ playerManager.setMessageInterceptor(
 **/
 //castContext.start();
 
-if (context.start() != null) {
-    let loadRequestData = new cast.framework.messages.LoadRequestData();
-    loadRequestData.autoplay = true;
-    playerManager.load(loadRequestData);
-}
 
 /** Debug Logger **/
 //const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
 
 // Enable debug logger and show a warning on receiver
 // NOTE: make sure it is disabled on production
-//castDebugLogger.setEnabled(false);
+castDebugLogger.setEnabled(true);
 
 // Show debug overlay
-//castDebugLogger.showDebugLogs(false);
+castDebugLogger.showDebugLogs(true);
 
 // Set verbosity level for custom tags
-//castDebugLogger.loggerLevelByTags = {
-//    'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
-//    'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
-//};
+castDebugLogger.loggerLevelByTags = {
+    'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
+    'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
+};
 
-//playerManager.addEventListener(
-//    cast.framework.events.category.CORE,
-//    event => {
-//        castDebugLogger.info('EVENT.CORE', event);
-//    });
+playerManager.addEventListener(
+    cast.framework.events.category.CORE,
+    event => {
+        castDebugLogger.info('EVENT.CORE', event);
+    });
+
+if (context.start() != null) {
+    let loadRequestData = new cast.framework.messages.LoadRequestData();
+    loadRequestData.autoplay = true;
+    playerManager.load(loadRequestData);
+}
