@@ -2,6 +2,7 @@ const context = cast.framework.CastReceiverContext.getInstance();
 const playerManager = context.getPlayerManager();
 const mediaElement = document.getElementsByTagName("cast-media-player")[0].getMediaElement();
 const streamManager = new google.ima.cast.dai.api.StreamManager(mediaElement);
+const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
 
 const getStreamRequest = (request) => {
   const imaRequestData = request.media.customData;
@@ -59,10 +60,7 @@ playerManager.setMessageInterceptor(
         return request;
     });
 **/
-castContext.start();
 
-
-/** Debug Logger **/
 //const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
 
 // Enable debug logger and show a warning on receiver
@@ -72,6 +70,7 @@ castDebugLogger.setEnabled(true);
 // Show debug overlay
 castDebugLogger.showDebugLogs(true);
 
+/** Debug Logger **/
 // Set verbosity level for custom tags
 castDebugLogger.loggerLevelByTags = {
     'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
@@ -83,6 +82,9 @@ playerManager.addEventListener(
     event => {
         castDebugLogger.info('EVENT.CORE', event);
     });
+
+context.start();
+
 
 /**
 if (context.start() != null) {
