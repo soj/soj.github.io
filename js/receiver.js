@@ -11,11 +11,6 @@ const getStreamRequest = (request) => {
     // Live stream
     streamRequest = new google.ima.cast.dai.api.LiveStreamRequest();
     streamRequest.assetKey = imaRequestData.assetKey;
-  } else if (imaRequestData.contentSourceId) {
-    // VOD stream
-    streamRequest = new google.ima.cast.dai.api.VODStreamRequest();
-    streamRequest.contentSourceId = imaRequestData.contentSourceId;
-    streamRequest.videoId = imaRequestData.videoId;
   }
   if (streamRequest && imaRequestData.ApiKey) {
     streamRequest.ApiKey = imaRequestData.ApiKey;
@@ -28,16 +23,22 @@ const getStreamRequest = (request) => {
 
 playerManager.setMessageInterceptor(
     cast.framework.messages.MessageType.LOAD, (request) => {
-      return streamManager.requestStream(request, getStreamRequest(request))
+
+        if (request.media.customData && request.media.customData.adTagUrl) {
+            request.media.vmapAdsRequest = {
+                adTagUrl: request.media.customData.adTagUrl
+            };
+            return request;    
+        } else {
+          return streamManager.requestStream(request, getStreamRequest(request))
           .then((request) => {
- //           this.broadcast('Stream request successful.');
             return Promise.resolve(request);
-          })
+            })
           .catch((error) => {
- //           this.broadcast('Stream request failed.');
             return Promise.resolve(request);
-          });
-    });
+            });
+        }
+  });
 
 /** LOAD interceptor **/
 /**
