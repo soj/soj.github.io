@@ -4,22 +4,23 @@ const mediaElement = document.getElementsByTagName("cast-media-player")[0].getMe
 const streamManager = new google.ima.cast.dai.api.StreamManager(mediaElement);
 const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
 
-    const getStreamRequest = (request) => {
-      const imaRequestData = request.media.customData;
-      let streamRequest = null;
-      if (imaRequestData.assetKey) {
-        // Live stream
-        streamRequest = new google.ima.cast.dai.api.LiveStreamRequest();
-        streamRequest.assetKey = imaRequestData.assetKey;
-    }
-    if (streamRequest && imaRequestData.ApiKey) {
-        streamRequest.ApiKey = imaRequestData.ApiKey;
-    }
-    if (streamRequest && imaRequestData.senderCanSkip) {
-        streamRequest.senderCanSkip = imaRequestData.senderCanSkip;
-    }
-    return streamRequest;
-    };
+const getStreamRequest = (request) => {
+  const imaRequestData = request.media.customData;
+  let streamRequest = null;
+  if (imaRequestData.assetKey) {
+    // Live stream
+    streamRequest = new google.ima.cast.dai.api.LiveStreamRequest();
+    streamRequest.assetKey = imaRequestData.assetKey;
+  }
+  if (streamRequest && imaRequestData.ApiKey) {
+    streamRequest.ApiKey = imaRequestData.ApiKey;
+  }
+  if (streamRequest && imaRequestData.senderCanSkip) {
+    streamRequest.senderCanSkip = imaRequestData.senderCanSkip;
+  }
+  streamRequest.media.hlsSegmentFormat = cast.framework.messages.HlsSegmentFormat.TS;
+  return streamRequest;
+};
 
 playerManager.setMessageInterceptor(
     cast.framework.messages.MessageType.LOAD, (request) => {
