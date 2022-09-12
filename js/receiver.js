@@ -18,12 +18,14 @@ const getStreamRequest = (request) => {
   if (streamRequest && imaRequestData.senderCanSkip) {
     streamRequest.senderCanSkip = imaRequestData.senderCanSkip;
   }
-  streamRequest.media.hlsSegmentFormat = cast.framework.messages.HlsSegmentFormat.TS;
+
   return streamRequest;
 };
 
 playerManager.setMessageInterceptor(
     cast.framework.messages.MessageType.LOAD, (request) => {
+
+        request.media.hlsSegmentFormat = cast.framework.messages.HlsSegmentFormat.TS;
 
         if (request.media.customData && request.media.customData.adTagUrl) {
             request.media.vmapAdsRequest = {
