@@ -52,6 +52,7 @@ playerManager.setMessageInterceptor(
           //   return Promise.resolve(request);
           //   });
           requestAdddd("123")
+          return request
 //        }
   });
 
