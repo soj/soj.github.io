@@ -91,6 +91,28 @@ context.start();
 
 
 /**
+ * Shows the video controls so users can resume after stream is paused.
+ */
+ function onStreamPause() {
+  console.log('paused');
+  if (isAdBreak) {
+    videoElement.controls = true;
+    adUiDiv.style.display = 'none';
+  }
+}
+
+/**
+ * Hides the video controls if resumed during an ad break.
+ */
+function onStreamPlay() {
+  console.log('played');
+  if (isAdBreak) {
+    videoElement.controls = false;
+    adUiDiv.style.display = 'block';
+  }
+}
+
+/**
 if (context.start() != null) {
     let loadRequestData = new cast.framework.messages.LoadRequestData();
     loadRequestData.autoplay = true;
