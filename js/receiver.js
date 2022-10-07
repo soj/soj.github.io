@@ -38,22 +38,22 @@ playerManager.setMessageInterceptor(
 
         request.media.hlsSegmentFormat = cast.framework.messages.HlsSegmentFormat.TS;
 
-        // if (request.media.customData && request.media.customData.adTagUrl) {
-        //     request.media.vmapAdsRequest = {
-        //         adTagUrl: request.media.customData.adTagUrl
-        //     };
-        //     return request;    
-        // } else {
-          // return streamManager.requestStream(request, getStreamRequest(request))
-          // .then((request) => {
-          //   return Promise.resolve(request);
-          //   })
-          // .catch((error) => {
-          //   return Promise.resolve(request);
-          //   });
-          requestAdddd("123")
-          return request
-//        }
+        if (request.media.customData && request.media.customData.adTagUrl) {
+            request.media.vmapAdsRequest = {
+                adTagUrl: request.media.customData.adTagUrl
+            };
+            return request;    
+        } else {
+          return streamManager.requestStream(request, getStreamRequest(request))
+          .then((request) => {
+            return Promise.resolve(request);
+            })
+          .catch((error) => {
+            return Promise.resolve(request);
+            });
+//          requestAdddd("123")
+//          return request
+       }
   });
 
 
