@@ -102,7 +102,7 @@ playerManager.setMessageInterceptor(
 castDebugLogger.setEnabled(true);
 
 // Show debug overlay
-castDebugLogger.showDebugLogs(false);
+castDebugLogger.showDebugLogs(true);
 
 /** Debug Logger **/
 // Set verbosity level for custom tags
