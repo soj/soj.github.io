@@ -43,19 +43,19 @@ playerManager.setMessageInterceptor(
           // почему тут два ретерна
           // и пончем реквест стрим так выглядит - и зачем делать then
 
-          // const error = new cast.framework.messages.ErrorData(
-          // cast.framework.messages.ErrorType.LOAD_FAILED);
+          const error = new cast.framework.messages.ErrorData(
+          cast.framework.messages.ErrorType.LOAD_FAILED);
 
-          return streamManager.requestStream(request, getStreamRequest(request))
-          .then((request) => {
-            return Promise.resolve(request);
-            })
-          .catch((error) => {
-            return Promise.resolve(request);
-            });
+          // return streamManager.requestStream(request, getStreamRequest(request))
+          // .then((request) => {
+          //   return Promise.resolve(request);
+          //   })
+          // .catch((error) => {
+          //   return Promise.resolve(request);
+          //   });
 
-//          requestPreroll();
-//          return error;
+         requestPreroll();
+         return error;
        }
   });
 
