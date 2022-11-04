@@ -60,7 +60,7 @@ playerManager.setMessageInterceptor(
   });
 
 
-  function requestPreroll()) {
+  function requestPreroll() {
     // Client side ads setup.
   adDisplayContainer = new google.ima.AdDisplayContainer(mediaElement);
   // Must be done as the result of a user action on mobile
