@@ -11,7 +11,6 @@ let adsManager;
 // Preroll ad tag
 const TEST_AD_TAG = 'https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_preroll_skippable&sz=640x480&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator=';
 
-
 const getStreamRequest = (request) => {
   const imaRequestData = request.media.customData;
   let streamRequest = null;
@@ -44,19 +43,19 @@ playerManager.setMessageInterceptor(
           // почему тут два ретерна
           // и пончем реквест стрим так выглядит - и зачем делать then
 
-          const error = new cast.framework.messages.ErrorData(
-          cast.framework.messages.ErrorType.LOAD_FAILED);
+          // const error = new cast.framework.messages.ErrorData(
+          // cast.framework.messages.ErrorType.LOAD_FAILED);
 
-          // return streamManager.requestStream(request, getStreamRequest(request))
-          // .then((request) => {
-          //   return Promise.resolve(request);
-          //   })
-          // .catch((error) => {
-          //   return Promise.resolve(request);
-          //   });
+          return streamManager.requestStream(request, getStreamRequest(request))
+          .then((request) => {
+            return Promise.resolve(request);
+            })
+          .catch((error) => {
+            return Promise.resolve(request);
+            });
 
-          requestPreroll();
-          return error;
+//          requestPreroll();
+//          return error;
        }
   });
 
