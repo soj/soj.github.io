@@ -46,6 +46,7 @@ playerManager.setMessageInterceptor(
           const error = new cast.framework.messages.ErrorData(
           cast.framework.messages.ErrorType.LOAD_FAILED);
 
+          castDebugLogger.warn('MyAPP.LOG', 'WE ARE HERE');
           // return streamManager.requestStream(request, getStreamRequest(request))
           // .then((request) => {
           //   return Promise.resolve(request);
@@ -62,16 +63,16 @@ playerManager.setMessageInterceptor(
 
   function requestPreroll() {
     // Client side ads setup.
-  adDisplayContainer = new google.ima.AdDisplayContainer(mediaElement);
+  adDisplayContainer = new google.ima.cast.dai.api.AdDisplayContainer(mediaElement);
   // Must be done as the result of a user action on mobile
   adDisplayContainer.initialize();
 
-  adsLoader = new google.ima.AdsLoader(adDisplayContainer);
+  adsLoader = new google.ima.cast.dai.api.AdsLoader(adDisplayContainer);
   adsLoader.addEventListener(
-    google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,
+    google.ima.cast.dai.api.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,
     onAdsManagerLoaded, false);
   adsLoader.addEventListener(
-    google.ima.AdErrorEvent.Type.AD_ERROR, onAdError, false);
+    google.ima.cast.dai.api.AdErrorEvent.Type.AD_ERROR, onAdError, false);
 
   requestPreroll(TEST_AD_TAG);
   }
@@ -127,7 +128,7 @@ context.start();
  * @param {string} adTagUrl
  */
  function requestPreroll(adTagUrl) {
-  const adsRequest = new google.ima.AdsRequest();
+  const adsRequest = new google.ima.cast.dai.api.AdsRequest();
   adsRequest.adTagUrl = adTagUrl;
   adsRequest.linearAdSlotWidth = 640;
   adsRequest.linearAdSlotHeight = 400;
@@ -140,18 +141,18 @@ context.start();
  */
  function onAdsManagerLoaded(adsManagerLoadedEvent) {
   adsManager = adsManagerLoadedEvent.getAdsManager(mediaElement);
-  adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, onAdError);
+  adsManager.addEventListener(google.ima.cast.dai.api.AdErrorEvent.Type.AD_ERROR, onAdError);
   adsManager.addEventListener(
-      google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED, function(e) {
+    google.ima.cast.dai.api.AdEvent.Type.CONTENT_PAUSE_REQUESTED, function(e) {
         console.log('Content pause requested.');
       });
   adsManager.addEventListener(
-      google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, function(e) {
+    google.ima.cast.dai.api.AdEvent.Type.CONTENT_RESUME_REQUESTED, function(e) {
         console.log('Content resume requested.');
         requestLiveStream(TEST_ASSET_KEY, null);
       });
   try {
-    adsManager.init(640, 360, google.ima.ViewMode.NORMAL);
+    adsManager.init(640, 360, google.ima.cast.dai.api.ViewMode.NORMAL);
     adsManager.start();
   } catch (adError) {
     // An error may be thrown if there was a problem with the VAST response.
