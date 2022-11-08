@@ -27,9 +27,9 @@ var savedMediaInformation;
  * finally, to clean up, remove the current queue itemm.
  **/
 playerManager.addEventListener(cast.framework.events.EventType.MEDIA_FINISHED, (e) => {
-  //const queueItem = queueManager.getCurrentItem();
-  //const media = queueItem.media;
-  const media = savedMediaInformation;
+  const queueItem = queueManager.getCurrentItem();
+  const media = queueItem.media;
+  //const media = savedMediaInformation;
   if (!media.vmapAdsRequest) {
     return;
   }
@@ -94,7 +94,7 @@ playerManager.setMessageInterceptor(
   });
 
 castDebugLogger.setEnabled(true);
-castDebugLogger.showDebugLogs(false);
+castDebugLogger.showDebugLogs(true);
 castDebugLogger.loggerLevelByTags = {
   'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
   'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
