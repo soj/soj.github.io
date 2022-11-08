@@ -27,6 +27,7 @@ var savedMediaInformation;
  * finally, to clean up, remove the current queue itemm.
  **/
 playerManager.addEventListener(cast.framework.events.EventType.MEDIA_FINISHED, (e) => {
+  const queueItems = queueManager.getItems();
   const queueItem = queueManager.getCurrentItem();
   const media = queueItem.media;
   //const media = savedMediaInformation;
