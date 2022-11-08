@@ -70,7 +70,7 @@ playerManager.setMessageInterceptor(
     }
     // Do not modify queue entries containing Ad Requests
     if (request.media.vmapAdsRequest) {
-      return;
+      return request;
     }
     // Only modify requests containing a DAI Live stream assetKey
     if (request.media.customData.assetKey) {
