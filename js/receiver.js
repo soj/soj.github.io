@@ -19,6 +19,8 @@ const insertNextInQueue = (newEntry) => {
   queueManager.insertItems([newEntry], nextItem.itemId);
 };
 
+var savedMediaInformation;
+
 /**
  * When a queue item finishes playback, if it contained both a VMAP tag and a DAI assetKey,
  * create a new queue item, next in the queue, containing the DAI assetKey, but not the VMAP request.
@@ -27,7 +29,7 @@ const insertNextInQueue = (newEntry) => {
 playerManager.addEventListener(cast.framework.events.EventType.MEDIA_FINISHED, (e) => {
   //const queueItem = queueManager.getCurrentItem();
   //const media = queueItem.media;
-  const media = playerManager.getMediaInformation();
+  const media = savedMediaInformation;
   if (!media.vmapAdsRequest) {
     return;
   }
@@ -71,6 +73,7 @@ playerManager.setMessageInterceptor(
     }
     // Do not modify queue entries containing Ad Requests
     if (request.media.vmapAdsRequest) {
+      savedMediaInformation = request.media;
       return request;
     }
     // Only modify requests containing a DAI Live stream assetKey
