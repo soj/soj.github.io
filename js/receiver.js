@@ -25,8 +25,9 @@ const insertNextInQueue = (newEntry) => {
  * finally, to clean up, remove the current queue itemm.
  **/
 playerManager.addEventListener(cast.framework.events.EventType.MEDIA_FINISHED, (e) => {
-  const queueItem = queueManager.getCurrentItem();
-  const media = queueItem.media;
+  //const queueItem = queueManager.getCurrentItem();
+  //const media = queueItem.media;
+  const media = playerManager.getMediaInformation();
   if (!media.vmapAdsRequest) {
     return;
   }
