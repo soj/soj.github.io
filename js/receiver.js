@@ -27,10 +27,10 @@ var savedMediaInformation;
  * finally, to clean up, remove the current queue itemm.
  **/
 playerManager.addEventListener(cast.framework.events.EventType.MEDIA_FINISHED, (e) => {
-  const queueItems = queueManager.getItems();
-  const queueItem = queueManager.getCurrentItem();
-  const media = queueItem.media;
-  //const media = savedMediaInformation;
+  // const queueItems = queueManager.getItems();
+  // const queueItem = queueManager.getCurrentItem();
+  // const media = queueItem.media;
+  const media = savedMediaInformation;
   if (!media.vmapAdsRequest) {
     return;
   }
@@ -42,8 +42,10 @@ playerManager.addEventListener(cast.framework.events.EventType.MEDIA_FINISHED, (
 
   const daiQueueItem = new cast.framework.messages.QueueItem();
   daiQueueItem.media = newMedia;
-  insertNextInQueue(daiQueueItem);
-  queueManager.removeItems([queueItem.itemId]);
+
+  queueManager.insertItems([newEntry]);
+//  insertNextInQueue(daiQueueItem);
+//  queueManager.removeItems([queueItem.itemId]);
 });
 
 const getStreamRequest = (requestData) => {
