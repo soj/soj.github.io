@@ -1,180 +1,99 @@
-const context = cast.framework.CastReceiverContext.getInstance();
-const playerManager = context.getPlayerManager();
-const mediaElement = document.getElementsByTagName("cast-media-player")[0].getMediaElement();
-const streamManager = new google.ima.cast.dai.api.StreamManager(mediaElement);
+const castContext = cast.framework.CastReceiverContext.getInstance();
+const playerManager = castContext.getPlayerManager();
+const queueManager = playerManager.getQueueManager();
+const streamManager = new google.ima.cast.dai.api.StreamManager();
 const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
 
-let adsLoader;
-let adDisplayContainer;
-let adsManager;
+const deepCopy = (original) => {
+  return JSON.parse(JSON.stringify(original));
+};
 
-// Preroll ad tag
-const TEST_AD_TAG = 'https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_preroll_skippable&sz=640x480&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator=';
+const insertNextInQueue = (newEntry) => {
+  const currentIndex = queueManager.getCurrentItemIndex();
+  const queue = queueManager.getItems();
+  if (currentIndex >= queue.length) {
+    queueManager.insertItems([newEntry]);
+    return;
+  }
+  const nextItem = queue[currentIndex + 1];
+  queueManager.insertItems([newEntry], nextItem.itemId);
+};
 
-const getStreamRequest = (request) => {
-  const imaRequestData = request.media.customData;
+/**
+ * When a queue item finishes playback, if it contained both a VMAP tag and a DAI assetKey,
+ * create a new queue item, next in the queue, containing the DAI assetKey, but not the VMAP request.
+ * finally, to clean up, remove the current queue itemm.
+ **/
+playerManager.addEventListener(cast.framework.events.EventType.MEDIA_FINISHED, (e) => {
+  const queueItem = queueManager.getCurrentItem();
+  const media = queueItem.media;
+  if (!media.vmapAdsRequest) {
+    return;
+  }
+  if (!media.customData.assetKey) {
+    return;
+  }
+  const newMedia = deepCopy(media);
+  newMedia.vmapAdsRequest = null;
+
+  const daiQueueItem = new cast.framework.messages.QueueItem();
+  daiQueueItem.media = newMedia;
+  insertNextInQueue(daiQueueItem);
+  queueManager.removeItems([queueItem.itemId]);
+});
+
+const getStreamRequest = (requestData) => {
   let streamRequest = null;
-  if (imaRequestData.assetKey) {
-    // Live stream
+  // Live stream only
+  if (requestData.assetKey) {
     streamRequest = new google.ima.cast.dai.api.LiveStreamRequest();
-    streamRequest.assetKey = imaRequestData.assetKey;
+    streamRequest.assetKey = requestData.assetKey;
   }
-  if (streamRequest && imaRequestData.ApiKey) {
-    streamRequest.ApiKey = imaRequestData.ApiKey;
+  if (streamRequest) {
+    if (requestData.ApiKey) {
+      streamRequest.ApiKey = requestData.ApiKey;
+    }
+    if (requestData.senderCanSkip) {
+      streamRequest.senderCanSkip = requestData.senderCanSkip;
+    }
   }
-  if (streamRequest && imaRequestData.senderCanSkip) {
-    streamRequest.senderCanSkip = imaRequestData.senderCanSkip;
-  }
-
   return streamRequest;
 };
 
+/**
+ * During the LOAD request only modify items without VMAP ad requests.
+ **/
 playerManager.setMessageInterceptor(
-    cast.framework.messages.MessageType.LOAD, (request) => {
+  cast.framework.messages.MessageType.LOAD, (request) => {
+    if (!request.media) {
+      return;
+    }
+    // Do not modify queue entries containing Ad Requests
+    if (request.media.vmapAdsRequest) {
+      return;
+    }
+    // Only modify requests containing a DAI Live stream assetKey
+    if (request.media.customData.assetKey) {
+      request.media.contentType = null;
+      request.media.streamType = chrome.cast.media.LIVE;
 
-        request.media.hlsSegmentFormat = cast.framework.messages.HlsSegmentFormat.TS;
-
-        if (request.media.customData && request.media.customData.adTagUrl) {
-            request.media.vmapAdsRequest = {
-                adTagUrl: request.media.customData.adTagUrl
-            };
-            return request;    
-        } else {
-          // почему тут два ретерна
-          // и пончем реквест стрим так выглядит - и зачем делать then
-
-          const error = new cast.framework.messages.ErrorData(
-          cast.framework.messages.ErrorType.LOAD_FAILED);
-
-          castDebugLogger.warn('MyAPP.LOG', 'WE ARE HERE');
-          // return streamManager.requestStream(request, getStreamRequest(request))
-          // .then((request) => {
-          //   return Promise.resolve(request);
-          //   })
-          // .catch((error) => {
-          //   return Promise.resolve(request);
-          //   });
-
-         requestPreroll();
-         return error;
-       }
+      const streamRequest = getStreamRequest(request.media.customData);
+      return streamManager.requestStream(request, streamRequest)
+        .then((request) => {
+          return Promise.resolve(request);
+        })
+        .catch((error) => {
+          this.broadcast('Stream request failed.');
+          return Promise.resolve(request);
+        });
+    }
   });
 
-
-  function requestPreroll() {
-    // Client side ads setup.
-  adDisplayContainer = new google.ima.cast.dai.api.AdDisplayContainer(mediaElement);
-  // Must be done as the result of a user action on mobile
-  adDisplayContainer.initialize();
-
-  adsLoader = new google.ima.cast.dai.api.AdsLoader(adDisplayContainer);
-  adsLoader.addEventListener(
-    google.ima.cast.dai.api.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,
-    onAdsManagerLoaded, false);
-  adsLoader.addEventListener(
-    google.ima.cast.dai.api.AdErrorEvent.Type.AD_ERROR, onAdError, false);
-
-  requestPreroll(TEST_AD_TAG);
-  }
-
-/** LOAD interceptor **/
-/**
-playerManager.setMessageInterceptor(
-    cast.framework.messages.MessageType.LOAD,
-    request => {
-//        castDebugLogger.info('MyAPP.LOG', 'Intercepting LOAD request');
-//        castDebugLogger.warn('MyAPP.LOG', 'Playable URL: ' + request.media.contentId);
-//        castDebugLogger.warn('MyAPP.LOG', 'The Event type: ' + request.type);
-
-        if (request.media.customData && request.media.customData.adTagUrl) {
-
-//            castDebugLogger.warn('MyAPP.LOG', 'Ad Tag: ' + request.media.customData.adTagUrl);
-
-            request.media.vmapAdsRequest = {
-                adTagUrl: request.media.customData.adTagUrl
-            };    
-        }
-
-        return request;
-    });
-**/
-
-//const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
-
-// Enable debug logger and show a warning on receiver
-// NOTE: make sure it is disabled on production
 castDebugLogger.setEnabled(true);
-
-// Show debug overlay
-castDebugLogger.showDebugLogs(true);
-
-/** Debug Logger **/
-// Set verbosity level for custom tags
+castDebugLogger.showDebugLogs(false);
 castDebugLogger.loggerLevelByTags = {
-    'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
-    'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
+  'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
+  'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
 };
 
-playerManager.addEventListener(
-    cast.framework.events.category.CORE,
-    event => {
-        castDebugLogger.info('EVENT.CORE', event);
-    });
-
-context.start();
-
-/**
- * Requests a preroll ad using the client side SDK.
- * @param {string} adTagUrl
- */
- function requestPreroll(adTagUrl) {
-  const adsRequest = new google.ima.cast.dai.api.AdsRequest();
-  adsRequest.adTagUrl = adTagUrl;
-  adsRequest.linearAdSlotWidth = 640;
-  adsRequest.linearAdSlotHeight = 400;
-  adsLoader.requestAds(adsRequest);
-}
-
-/**
- * Handles the adsManagerLoaded event (client side ads).
- * @param {!google.ima.dai.api.AdsManagerLoadedEvent} adsManagerLoadedEvent
- */
- function onAdsManagerLoaded(adsManagerLoadedEvent) {
-  adsManager = adsManagerLoadedEvent.getAdsManager(mediaElement);
-  adsManager.addEventListener(google.ima.cast.dai.api.AdErrorEvent.Type.AD_ERROR, onAdError);
-  adsManager.addEventListener(
-    google.ima.cast.dai.api.AdEvent.Type.CONTENT_PAUSE_REQUESTED, function(e) {
-        console.log('Content pause requested.');
-      });
-  adsManager.addEventListener(
-    google.ima.cast.dai.api.AdEvent.Type.CONTENT_RESUME_REQUESTED, function(e) {
-        console.log('Content resume requested.');
-        requestLiveStream(TEST_ASSET_KEY, null);
-      });
-  try {
-    adsManager.init(640, 360, google.ima.cast.dai.api.ViewMode.NORMAL);
-    adsManager.start();
-  } catch (adError) {
-    // An error may be thrown if there was a problem with the VAST response.
-  }
-}
-
-/**
- * Handles an ad error (client side ads).
- * @param {!google.ima.dai.api.AdErrorEvent} adErrorEvent
- */
- function onAdError(adErrorEvent) {
-  console.log(adErrorEvent.getError());
-  if (adsManager) {
-    adsManager.destroy();
-  }
-}
-
-
-/**
-if (context.start() != null) {
-    let loadRequestData = new cast.framework.messages.LoadRequestData();
-    loadRequestData.autoplay = true;
-    playerManager.load(loadRequestData);
-}
-**/
+castContext.start();
