@@ -43,7 +43,7 @@ playerManager.addEventListener(cast.framework.events.EventType.MEDIA_FINISHED, (
   const daiQueueItem = new cast.framework.messages.QueueItem();
   daiQueueItem.media = newMedia;
 
-  queueManager.insertItems([newEntry]);
+  queueManager.insertItems([daiQueueItem]);
 //  insertNextInQueue(daiQueueItem);
 //  queueManager.removeItems([queueItem.itemId]);
 });
