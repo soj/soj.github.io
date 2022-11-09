@@ -4,28 +4,27 @@ const queueManager = playerManager.getQueueManager();
 const streamManager = new google.ima.cast.dai.api.StreamManager();
 const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
 
-const deepCopy = (original) => {
-  return JSON.parse(JSON.stringify(original));
-};
+// const deepCopy = (original) => {
+//   return JSON.parse(JSON.stringify(original));
+// };
 
-const insertNextInQueue = (newEntry) => {
-  const currentIndex = queueManager.getCurrentItemIndex();
-  const queue = queueManager.getItems();
-  if (currentIndex >= queue.length) {
-    queueManager.insertItems([newEntry]);
-    return;
-  }
-  const nextItem = queue[currentIndex + 1];
-  queueManager.insertItems([newEntry], nextItem.itemId);
-};
-
-var savedMediaInformation;
+// const insertNextInQueue = (newEntry) => {
+//   const currentIndex = queueManager.getCurrentItemIndex();
+//   const queue = queueManager.getItems();
+//   if (currentIndex >= queue.length) {
+//     queueManager.insertItems([newEntry]);
+//     return;
+//   }
+//   const nextItem = queue[currentIndex + 1];
+//   queueManager.insertItems([newEntry], nextItem.itemId);
+// };
 
 /**
  * When a queue item finishes playback, if it contained both a VMAP tag and a DAI assetKey,
  * create a new queue item, next in the queue, containing the DAI assetKey, but not the VMAP request.
  * finally, to clean up, remove the current queue itemm.
  **/
+/** 
 playerManager.addEventListener(cast.framework.events.EventType.BREAK_ENDED, (e) => {
   // const queueItems = queueManager.getItems();
   // const queueItem = queueManager.getCurrentItem();
@@ -47,6 +46,7 @@ playerManager.addEventListener(cast.framework.events.EventType.BREAK_ENDED, (e) 
 //  insertNextInQueue(daiQueueItem);
 //  queueManager.removeItems([queueItem.itemId]);
 });
+**/
 
 const getStreamRequest = (requestData) => {
   let streamRequest = null;
@@ -76,13 +76,12 @@ playerManager.setMessageInterceptor(
     }
     // Do not modify queue entries containing Ad Requests
     if (request.media.vmapAdsRequest) {
-      savedMediaInformation = request.media;
       return request;
     }
     // Only modify requests containing a DAI Live stream assetKey
     if (request.media.customData.assetKey) {
-      request.media.contentType = null;
-      request.media.streamType = chrome.cast.media.LIVE;
+      // request.media.contentType = null;
+      // request.media.streamType = chrome.cast.media.LIVE;
 
       const streamRequest = getStreamRequest(request.media.customData);
       return streamManager.requestStream(request, streamRequest)
