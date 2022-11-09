@@ -89,14 +89,14 @@ playerManager.setMessageInterceptor(
           return Promise.resolve(request);
         })
         .catch((error) => {
-          this.broadcast('Stream request failed.');
+          // this.broadcast('Stream request failed.');
           return Promise.resolve(request);
         });
     }
   });
 
 castDebugLogger.setEnabled(true);
-castDebugLogger.showDebugLogs(true);
+castDebugLogger.showDebugLogs(false);
 castDebugLogger.loggerLevelByTags = {
   'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
   'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
