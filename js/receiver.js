@@ -26,7 +26,7 @@ var savedMediaInformation;
  * create a new queue item, next in the queue, containing the DAI assetKey, but not the VMAP request.
  * finally, to clean up, remove the current queue itemm.
  **/
-playerManager.addEventListener(cast.framework.events.EventType.MEDIA_FINISHED, (e) => {
+playerManager.addEventListener(cast.framework.events.EventType.BREAK_ENDED, (e) => {
   // const queueItems = queueManager.getItems();
   // const queueItem = queueManager.getCurrentItem();
   // const media = queueItem.media;
