@@ -84,7 +84,7 @@ playerManager.setMessageInterceptor(
       // request.media.contentType = null;
       // request.media.streamType = chrome.cast.media.LIVE;
 
-      //request.media.hlsSegmentFormat = cast.framework.messages.HlsSegmentFormat.TS;
+      request.media.hlsSegmentFormat = cast.framework.messages.HlsSegmentFormat.TS;
 
       const streamRequest = getStreamRequest(request.media.customData);
       return streamManager.requestStream(request, streamRequest)
