@@ -96,6 +96,11 @@ playerManager.setMessageInterceptor(
           return Promise.resolve(request);
         });
     } else {
+      if (request.media.customData && request.media.customData.adTagUrl) {
+        request.media.vmapAdsRequest = {
+          adTagUrl: request.media.customData.adTagUrl
+        };    
+      }
       return request;
     }
   });
