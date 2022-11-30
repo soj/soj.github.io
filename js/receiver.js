@@ -76,7 +76,7 @@ playerManager.setMessageInterceptor(
     }
     // Do not modify queue entries containing Ad Requests
     if (request.media.vmapAdsRequest) {
-      castDebugLogger.debug('VM App', 'vmap ads request here')
+      //castDebugLogger.debug('VM App', 'vmap ads request here')
       return request;
     }
     // Only modify requests containing a DAI Live stream assetKey
