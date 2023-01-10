@@ -15,6 +15,9 @@ const getStreamRequest = (requestData) => {
     if (requestData.ApiKey) {
       streamRequest.ApiKey = requestData.ApiKey;
     }
+    if (requestData.authToken) {
+      streamRequest.authToken = requestData.authToken;
+    }
     if (requestData.senderCanSkip) {
       streamRequest.senderCanSkip = requestData.senderCanSkip;
     }
