@@ -58,7 +58,7 @@ playerManager.setMessageInterceptor(
     }
   });
 
-castDebugLogger.setEnabled(true);
+castDebugLogger.setEnabled(false);
 castDebugLogger.showDebugLogs(false);
 castDebugLogger.loggerLevelByTags = {
   'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
