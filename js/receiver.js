@@ -21,6 +21,9 @@ const getStreamRequest = (requestData) => {
     if (requestData.senderCanSkip) {
       streamRequest.senderCanSkip = requestData.senderCanSkip;
     }
+    if (requestData.adTagParameters) {
+      streamRequest.adTagParameters = requestData.adTagParameters;
+    }
   }
   return streamRequest;
 };
