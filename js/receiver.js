@@ -3,6 +3,7 @@ const playerManager = castContext.getPlayerManager();
 const queueManager = playerManager.getQueueManager();
 const streamManager = new google.ima.cast.dai.api.StreamManager();
 const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
+const playbackConfig = new cast.framework.PlaybackConfig();
 
 const getStreamRequest = (requestData) => {
   let streamRequest = null;
@@ -24,6 +25,21 @@ const getStreamRequest = (requestData) => {
     if (requestData.adTagParameters) {
       streamRequest.adTagParameters = requestData.adTagParameters;
     }
+
+    playbackConfig.licenseRequestHandler = requestInfo => {
+      requestInfo.withCredentials = false;
+
+      let body = {
+          token: "",
+          drm_info: Array.apply(null, new Uint8Array(requestInfo.content)),
+          contentId: ""
+      };
+
+      body = JSON.stringify(body);
+      requestInfo.content = body;
+
+      requestInfo.headers["Content-Type"] = "application/json";
+    };
   }
   return streamRequest;
 };
@@ -68,4 +84,4 @@ castDebugLogger.loggerLevelByTags = {
   'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
 };
 
-castContext.start();
+context.start({playbackConfig: playbackConfig});
