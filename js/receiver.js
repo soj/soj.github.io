@@ -84,4 +84,4 @@ castDebugLogger.loggerLevelByTags = {
   'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
 };
 
-context.start({playbackConfig: playbackConfig});
+castContext.start({playbackConfig: playbackConfig});
