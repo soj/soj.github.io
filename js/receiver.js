@@ -26,20 +26,20 @@ const getStreamRequest = (requestData) => {
       streamRequest.adTagParameters = requestData.adTagParameters;
     }
 
-    playbackConfig.licenseRequestHandler = requestInfo => {
-      requestInfo.withCredentials = false;
+    // playbackConfig.licenseRequestHandler = requestInfo => {
+    //   requestInfo.withCredentials = false;
 
-      let body = {
-          token: "",
-          drm_info: Array.apply(null, new Uint8Array(requestInfo.content)),
-          contentId: ""
-      };
+    //   let body = {
+    //       token: "",
+    //       drm_info: Array.apply(null, new Uint8Array(requestInfo.content)),
+    //       contentId: ""
+    //   };
 
-      body = JSON.stringify(body);
-      requestInfo.content = body;
+    //   body = JSON.stringify(body);
+    //   requestInfo.content = body;
 
-      requestInfo.headers["Content-Type"] = "application/json";
-    };
+    //   requestInfo.headers["Content-Type"] = "application/json";
+    // };
   }
   return streamRequest;
 };
@@ -78,10 +78,16 @@ playerManager.setMessageInterceptor(
   });
 
 castDebugLogger.setEnabled(true);
-castDebugLogger.showDebugLogs(false);
+castDebugLogger.showDebugLogs(true);
 castDebugLogger.loggerLevelByTags = {
   'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
   'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
+};
+
+playbackConfig.licenseUrl = 'https://VMTV.test.ott.irdeto.com/licenseServer/widevine/v1/VMTV/license';
+playbackConfig.protectionSystem = cast.framework.ContentProtection.WIDEVINE;
+playbackConfig.licenseRequestHandler = requestInfo => {
+  requestInfo.withCredentials = false;
 };
 
 castContext.start({playbackConfig: playbackConfig});
