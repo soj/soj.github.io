@@ -25,25 +25,9 @@ const getStreamRequest = (requestData) => {
     if (requestData.adTagParameters) {
       streamRequest.adTagParameters = requestData.adTagParameters;
     }
-
     if (requestData.licenseUrl) {
       playbackConfig.licenseUrl = requestData.licenseUrl;
     }
-
-    // playbackConfig.licenseRequestHandler = requestInfo => {
-    //   requestInfo.withCredentials = false;
-
-    //   let body = {
-    //       token: "",
-    //       drm_info: Array.apply(null, new Uint8Array(requestInfo.content)),
-    //       contentId: ""
-    //   };
-
-    //   body = JSON.stringify(body);
-    //   requestInfo.content = body;
-
-    //   requestInfo.headers["Content-Type"] = "application/json";
-    // };
   }
   return streamRequest;
 };
