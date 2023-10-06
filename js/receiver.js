@@ -26,6 +26,10 @@ const getStreamRequest = (requestData) => {
       streamRequest.adTagParameters = requestData.adTagParameters;
     }
 
+    if (requestData.licenseUrl) {
+      playbackConfig.licenseUrl = requestData.licenseUrl;
+    }
+
     // playbackConfig.licenseRequestHandler = requestInfo => {
     //   requestInfo.withCredentials = false;
 
@@ -78,13 +82,13 @@ playerManager.setMessageInterceptor(
   });
 
 castDebugLogger.setEnabled(true);
-castDebugLogger.showDebugLogs(true);
+castDebugLogger.showDebugLogs(false);
 castDebugLogger.loggerLevelByTags = {
   'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
   'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
 };
 
-playbackConfig.licenseUrl = 'https://VMTV.test.ott.irdeto.com/licenseServer/widevine/v1/VMTV/license';
+playbackConfig.licenseUrl = '';
 playbackConfig.protectionSystem = cast.framework.ContentProtection.WIDEVINE;
 playbackConfig.licenseRequestHandler = requestInfo => {
   requestInfo.withCredentials = false;
