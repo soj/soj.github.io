@@ -78,4 +78,6 @@ playbackConfig.licenseRequestHandler = requestInfo => {
   requestInfo.withCredentials = false;
 };
 
+playbackConfig.shakaConfig = { abr: { enabled: true, restrictions: { maxBandwidth: 1400000 } } };
+
 castContext.start({playbackConfig: playbackConfig});
