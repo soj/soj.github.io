@@ -72,12 +72,12 @@ castDebugLogger.loggerLevelByTags = {
   'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
 };
 
-playbackConfig.licenseUrl = '';
-playbackConfig.protectionSystem = cast.framework.ContentProtection.WIDEVINE;
-playbackConfig.licenseRequestHandler = requestInfo => {
-  requestInfo.withCredentials = false;
-};
+// playbackConfig.licenseUrl = '';
+// playbackConfig.protectionSystem = cast.framework.ContentProtection.WIDEVINE;
+// playbackConfig.licenseRequestHandler = requestInfo => {
+//   requestInfo.withCredentials = false;
+// };
 
-playbackConfig.shakaConfig = { abr: { enabled: true, restrictions: { maxBandwidth: 500000 } } };
+// playbackConfig.shakaConfig = { abr: { enabled: true, restrictions: { maxBandwidth: 500000 } } };
 
 castContext.start({playbackConfig: playbackConfig});
