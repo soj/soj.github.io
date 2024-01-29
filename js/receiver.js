@@ -43,7 +43,7 @@ playerManager.setMessageInterceptor(
     }
     // Only modify requests containing a DAI Live stream assetKey
     if (request.media.customData.assetKey) {
-      // request.media.hlsSegmentFormat = cast.framework.messages.HlsSegmentFormat.TS;
+      request.media.hlsSegmentFormat = cast.framework.messages.HlsSegmentFormat.TS_AAC;
 
       const streamRequest = getStreamRequest(request.media.customData);
       return streamManager.requestStream(request, streamRequest)
