@@ -75,6 +75,7 @@ castDebugLogger.loggerLevelByTags = {
 
 castReceiverOptions.useShakaForHls = true;
 
+
 // playbackConfig.licenseUrl = '';
 // playbackConfig.protectionSystem = cast.framework.ContentProtection.WIDEVINE;
 // playbackConfig.licenseRequestHandler = requestInfo => {
@@ -83,4 +84,6 @@ castReceiverOptions.useShakaForHls = true;
 
 // playbackConfig.shakaConfig = { abr: { enabled: true, restrictions: { maxBandwidth: 500000 } } };
 
-castContext.start({playbackConfig: playbackConfig});
+//castReceiverOptions.playbackConfig = playbackConfig;
+
+castContext.start(castReceiverOptions);
