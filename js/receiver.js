@@ -88,4 +88,4 @@ castDebugLogger.loggerLevelByTags = {
 
 // castContext.start(castReceiverOptions);
 
-castContext.start({useShakaForHls: true, shakaVersion:'4.3.3'});
+castContext.start({useShakaForHls: true, shakaVersion:'5.0.0'});
