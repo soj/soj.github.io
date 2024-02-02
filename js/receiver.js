@@ -4,7 +4,7 @@ const queueManager = playerManager.getQueueManager();
 const streamManager = new google.ima.cast.dai.api.StreamManager();
 const castDebugLogger = cast.debug.CastDebugLogger.getInstance();
 const playbackConfig = new cast.framework.PlaybackConfig();
-const castReceiverOptions = new cast.framework.CastReceiverOptions();
+//const castReceiverOptions = new cast.framework.CastReceiverOptions();
 
 const getStreamRequest = (requestData) => {
   let streamRequest = null;
@@ -73,7 +73,7 @@ castDebugLogger.loggerLevelByTags = {
   'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
 };
 
-castReceiverOptions.useShakaForHls = true;
+// castReceiverOptions.useShakaForHls = true;
 
 
 // playbackConfig.licenseUrl = '';
@@ -86,4 +86,6 @@ castReceiverOptions.useShakaForHls = true;
 
 //castReceiverOptions.playbackConfig = playbackConfig;
 
-castContext.start(castReceiverOptions);
+// castContext.start(castReceiverOptions);
+
+context.start({useShakaForHls: true, shakaVersion:'4.3.3'});
