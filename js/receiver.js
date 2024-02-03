@@ -67,7 +67,7 @@ playerManager.setMessageInterceptor(
   });
 
 castDebugLogger.setEnabled(true);
-castDebugLogger.showDebugLogs(false);
+castDebugLogger.showDebugLogs(true);
 castDebugLogger.loggerLevelByTags = {
   'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
   'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
