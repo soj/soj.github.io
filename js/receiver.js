@@ -67,7 +67,7 @@ playerManager.setMessageInterceptor(
   });
 
 castDebugLogger.setEnabled(true);
-castDebugLogger.showDebugLogs(true);
+castDebugLogger.showDebugLogs(false);
 castDebugLogger.loggerLevelByTags = {
   'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
   'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
@@ -88,4 +88,4 @@ castDebugLogger.loggerLevelByTags = {
 
 // castContext.start(castReceiverOptions);
 
-castContext.start({useShakaForHls: true, shakaVersion:'5.0.0'});
+castContext.start({useShakaForHls: true, shakaVersion:'4.3.4'});
