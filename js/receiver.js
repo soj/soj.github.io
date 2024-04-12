@@ -25,6 +25,7 @@ const getStreamRequest = (requestData) => {
     }
     if (requestData.adTagParameters) {
       streamRequest.adTagParameters = requestData.adTagParameters;
+      castDebugLogger.info('MyAPP.LOG', 'Stream ad tag parameters - ', requestData.adTagParameters);
     }
     if (requestData.licenseUrl) {
       playbackConfig.licenseUrl = requestData.licenseUrl;
@@ -61,6 +62,7 @@ playerManager.setMessageInterceptor(
         request.media.vmapAdsRequest = {
           adTagUrl: request.media.customData.adTagUrl
         };    
+        castDebugLogger.info('MyAPP.LOG', 'VOD or preroll ad tag url - ', request.media.customData.adTagUrl);
       }
       return request;
     }
@@ -70,7 +72,19 @@ castDebugLogger.setEnabled(true);
 castDebugLogger.showDebugLogs(false);
 castDebugLogger.loggerLevelByTags = {
   'EVENT.CORE': cast.framework.LoggerLevel.DEBUG,
-  'MyAPP.LOG': cast.framework.LoggerLevel.WARNING
+  'MyAPP.LOG': cast.framework.LoggerLevel.DEBUG
+};
+
+// Set verbosity level for Core events.
+castDebugLogger.loggerLevelByEvents = {
+  'cast.framework.events.category.CORE': cast.framework.LoggerLevel.DEBUG,
+  'cast.framework.events.category.DEBUG': cast.framework.LoggerLevel.DEBUG,
+  'cast.framework.events.EventType.BREAK_ENDED': cast.framework.LoggerLevel.DEBUG,
+  'cast.framework.events.EventType.BREAK_STARTED': cast.framework.LoggerLevel.DEBUG,
+  'cast.framework.events.EventType.BREAK_CLIP_ENDED': cast.framework.LoggerLevel.DEBUG,
+  'cast.framework.events.EventType.BREAK_CLIP_LOADING': cast.framework.LoggerLevel.DEBUG,
+  'cast.framework.events.EventType.BREAK_CLIP_STARTED': cast.framework.LoggerLevel.DEBUG,
+  'cast.framework.events.EventType.MEDIA_STATUS': cast.framework.LoggerLevel.DEBUG
 };
 
 // castReceiverOptions.useShakaForHls = true;
