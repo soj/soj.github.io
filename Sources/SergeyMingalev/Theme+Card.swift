@@ -20,10 +20,12 @@ private enum Lang {
     var homePath: String { self == .ru ? "/" : "/en/" }
     var blogPath: String { self == .ru ? "/posts/" : "/en/posts/" }
     var portfolioPath: String { self == .ru ? "/projects/" : "/en/projects/" }
+    var contactsPath: String { self == .ru ? "/contacts/" : "/en/contacts/" }
 
     var navHome: String { self == .ru ? "Главная" : "Home" }
     var navBlog: String { self == .ru ? "Блог" : "Blog" }
     var navPortfolio: String { self == .ru ? "Портфолио" : "Portfolio" }
+    var navContacts: String { self == .ru ? "Контакты" : "Contacts" }
 
     var featuredProjects: String { self == .ru ? "Избранные проекты" : "Featured projects" }
     var recentPosts: String { self == .ru ? "Последние записи" : "Recent posts" }
@@ -136,68 +138,72 @@ private struct CardHTMLFactory: HTMLFactory {
     func makePageHTML(for page: Page,
                       context: PublishingContext<SergeyMingalev>) throws -> HTML {
         let site = context.site
-        let lang = Lang.en
-        let relative = enRelative(page)
+        let fullPath = rel(page.path)
+        let isEN = (fullPath == "en" || fullPath.hasPrefix("en/"))
+        let lang: Lang = isEN ? .en : .ru
+        let relative = isEN ? enRelative(page) : fullPath
 
-        switch relative {
-        case "":
-            // Главная EN (визитка)
-            let cards = enItems(in: "projects", context).prefix(3).map {
-                card(title: $0.title, description: $0.description, url: $0.path, tech: nil, lang: lang)
-            }
-            let rows: [Node<HTML.ListContext>] = enItems(in: "posts", context).prefix(3).map {
-                .li(postRow(title: $0.title, date: $0.date, description: $0.description,
-                            url: $0.path, lang: lang))
-            }
-            return self.page(
-                lang: lang, relative: "", bodyClass: "home",
-                title: "\(site.name) — \(site.tagline)", description: page.description,
-                site: site,
-                main: .main(
-                    hero(site: site, lang: lang),
-                    .section(.class("about container"), .contentBody(page.body)),
-                    featuredSection(cards: Array(cards), lang: lang),
-                    recentSection(rows: rows, lang: lang)
+        // Спец-страницы EN: главная и листинги блога/портфолио.
+        // (У RU это Index и секции — они идут через makeIndexHTML / makeSectionHTML.)
+        if isEN {
+            switch relative {
+            case "":
+                let cards = enItems(in: "projects", context).prefix(3).map {
+                    card(title: $0.title, description: $0.description, url: $0.path, tech: nil, lang: lang)
+                }
+                let rows: [Node<HTML.ListContext>] = enItems(in: "posts", context).prefix(3).map {
+                    .li(postRow(title: $0.title, date: $0.date, description: $0.description,
+                                url: $0.path, lang: lang))
+                }
+                return self.page(
+                    lang: lang, relative: "", bodyClass: "home",
+                    title: "\(site.name) — \(site.tagline)", description: page.description,
+                    site: site,
+                    main: .main(
+                        hero(site: site, lang: lang),
+                        .section(.class("about container"), .contentBody(page.body)),
+                        featuredSection(cards: Array(cards), lang: lang),
+                        recentSection(rows: rows, lang: lang)
+                    )
                 )
-            )
-
-        case "projects":
-            // Листинг портфолио EN
-            let cards = enItems(in: "projects", context).map {
-                card(title: $0.title, description: $0.description, url: $0.path, tech: nil, lang: lang)
-            }
-            return self.page(
-                lang: lang, relative: relative, bodyClass: nil,
-                title: "\(page.title) | \(site.name)", description: page.description,
-                site: site,
-                main: .main(
-                    .section(.class("container page-head"),
-                             .h1(.text(page.title)),
-                             bodyAfterTitle(page.body)),
-                    .div(.class("container"), .div(.class("cards"), .group(cards)))
+            case "projects":
+                let cards = enItems(in: "projects", context).map {
+                    card(title: $0.title, description: $0.description, url: $0.path, tech: nil, lang: lang)
+                }
+                return self.page(
+                    lang: lang, relative: relative, bodyClass: nil,
+                    title: "\(page.title) | \(site.name)", description: page.description,
+                    site: site,
+                    main: .main(
+                        .section(.class("container page-head"),
+                                 .h1(.text(page.title)),
+                                 bodyAfterTitle(page.body)),
+                        .div(.class("container"), .div(.class("cards"), .group(cards)))
+                    )
                 )
-            )
-
-        case "posts":
-            // Листинг блога EN
-            let rows: [Node<HTML.ListContext>] = enItems(in: "posts", context).map {
-                .li(postRow(title: $0.title, date: $0.date, description: $0.description,
-                            url: $0.path, lang: lang))
-            }
-            return self.page(
-                lang: lang, relative: relative, bodyClass: nil,
-                title: "\(page.title) | \(site.name)", description: page.description,
-                site: site,
-                main: .main(
-                    .section(.class("container page-head"),
-                             .h1(.text(page.title)),
-                             bodyAfterTitle(page.body)),
-                    .div(.class("container"), .ul(.class("post-list"), .group(rows)))
+            case "posts":
+                let rows: [Node<HTML.ListContext>] = enItems(in: "posts", context).map {
+                    .li(postRow(title: $0.title, date: $0.date, description: $0.description,
+                                url: $0.path, lang: lang))
+                }
+                return self.page(
+                    lang: lang, relative: relative, bodyClass: nil,
+                    title: "\(page.title) | \(site.name)", description: page.description,
+                    site: site,
+                    main: .main(
+                        .section(.class("container page-head"),
+                                 .h1(.text(page.title)),
+                                 bodyAfterTitle(page.body)),
+                        .div(.class("container"), .ul(.class("post-list"), .group(rows)))
+                    )
                 )
-            )
+            default:
+                break  // EN-статьи и отдельные страницы — обрабатываются ниже
+            }
+        }
 
-        default:
-            // Отдельная запись EN (пост или проект)
+        // Страница «Контакты» — общая для RU и EN. Ссылки берём из main.swift.
+        if relative == "contacts" {
             return self.page(
                 lang: lang, relative: relative, bodyClass: "item-page",
                 title: "\(page.title) | \(site.name)", description: page.description,
@@ -206,12 +212,27 @@ private struct CardHTMLFactory: HTMLFactory {
                     .article(
                         .class("container article"),
                         .h1(.text(page.title)),
-                        .p(.class("meta"), .text(Self.dateString(page.date, lang: lang))),
-                        bodyAfterTitle(page.body)
+                        bodyAfterTitle(page.body),
+                        socialLinks(site: site)
                     )
                 )
             )
         }
+
+        // Отдельная запись (EN пост / проект) — с датой.
+        return self.page(
+            lang: lang, relative: relative, bodyClass: "item-page",
+            title: "\(page.title) | \(site.name)", description: page.description,
+            site: site,
+            main: .main(
+                .article(
+                    .class("container article"),
+                    .h1(.text(page.title)),
+                    .p(.class("meta"), .text(Self.dateString(page.date, lang: lang))),
+                    bodyAfterTitle(page.body)
+                )
+            )
+        )
     }
 
     // MARK: - Теги (не используем)
@@ -266,7 +287,8 @@ private extension CardHTMLFactory {
                         .class("nav-links"),
                         .a(.href(lang.homePath), .text(lang.navHome)),
                         .a(.href(lang.blogPath), .text(lang.navBlog)),
-                        .a(.href(lang.portfolioPath), .text(lang.navPortfolio))
+                        .a(.href(lang.portfolioPath), .text(lang.navPortfolio)),
+                        .a(.href(lang.contactsPath), .text(lang.navContacts))
                     ),
                     langSwitch(current: lang, relative: relative)
                 )
