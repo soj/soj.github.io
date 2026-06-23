@@ -17,9 +17,9 @@ struct SergeyMingalev: Website {
     }
 
     // Основные настройки — правьте под себя:
-    var url = URL(string: "https://sergeymingalev.dev")!
+    var url = URL(string: "https://soj.github.io")!
     var name = "Sergey Mingalev"
-    var description = "iOS / Swift разработчик — блог и портфолио"
+    var description = "iOS разработчик — блог и портфолио"
     var language: Language { .russian }
     var imagePath: Path? { nil }
 
@@ -27,10 +27,10 @@ struct SergeyMingalev: Website {
     var tagline = "iOS / Swift Developer"
 
     // Контакты и соцсети. Впишите свои; ненужные оставьте nil.
-    var email: String? = "you@example.com"
-    var githubURL: String? = "https://github.com/your-handle"
+    var email: String? = "s.sojik at gmail dot com"
+    var githubURL: String? = "https://github.com/soj"
     var telegramURL: String? = nil
-    var linkedInURL: String? = nil
+    var linkedInURL: String? = "https://www.linkedin.com/in/mingalev/"
 }
 
 // Генерация сайта с собственной темой `card`.
