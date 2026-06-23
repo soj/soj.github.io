@@ -33,6 +33,19 @@ publish run          # пересборка + локальный сервер :8
 Превью статики без интерактивности:
 `python3 -m http.server 8000 --directory Output`
 
+## Деплой (GitHub Pages)
+
+Сайт развёрнут вживую: **https://soj.github.io/** (RU) и **/en/** (EN).
+Репозиторий `soj/soj.github.io`, ветка `main` — исходники; источник Pages = **GitHub Actions**.
+
+Цикл обновления:
+1. Правите контент/тему → `git commit`.
+2. `git push` в `main`.
+3. Workflow `.github/workflows/deploy.yml` собирает сайт (`swift run SergeyMingalev`)
+   на macOS-раннере и деплоит `Output/` в Pages.
+
+`Output/` в git не хранится — его генерирует CI. Движок `Publish/` в репозиторий не входит.
+
 ## Структура контента
 
 ```
