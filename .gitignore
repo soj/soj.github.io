@@ -1,0 +1,10 @@
+.DS_Store
+/build
+/.build
+/.swiftpm
+/*.xcodeproj
+.publish
+
+# Сгенерированный сайт — не версионируем в ветке исходников,
+# он деплоится отдельно (publish deploy / GitHub Actions).
+/Output
